@@ -60,7 +60,7 @@ def _build_folder(folder: Path, target_nominal_resolutions: List[int], forcibly_
     return True
 
 
-def generate_flutter_image_assets(source_folder: Path, target_folder: Path, nominal_resolution_of_source: int, nominal_resolution_target: int, forcibly_rebuild: bool = False) -> bool:
+def generate_flutter_image_assets(source_folder: Path, target_folder: Path, nominal_resolution_of_source: int, nominal_resolution_target: int, forcibly_rebuild: bool = False, append_preferred_dimension=True) -> bool:
     """
     Returns:
         `False` if the folder already exists and the `forcibly_rebuild` parameter is `False`. Otherwise returns `True`.
@@ -84,11 +84,13 @@ def generate_flutter_image_assets(source_folder: Path, target_folder: Path, nomi
         return False
 
     for image_file_path in image_file_paths:
-        filename_suffix = image_file_path.suffix
-        filename_without_suffix = image_file_path.name[:-len(filename_suffix)]
+        filename_to_save = image_file_path.name
 
         with Image.open(image_file_path) as image:
-            filename_to_save = '{!s}-{:.2F}cmx{:.2F}cm{!s}'.format(filename_without_suffix, *map(lambda x: x/nominal_resolution_of_source/LOGICAL_PIXELS_PER_CENTIMETER, image.size), filename_suffix)
+            if append_preferred_dimension:
+                filename_suffix = image_file_path.suffix
+                filename_without_suffix = image_file_path.name[:-len(filename_suffix)]
+                filename_to_save = '{!s}-{:.2F}cmx{:.2F}cm{!s}'.format(filename_without_suffix, *map(lambda x: x/nominal_resolution_of_source/LOGICAL_PIXELS_PER_CENTIMETER, image.size), filename_suffix)
 
             for nominal_resolution in target_nominal_resolutions:
                 saving_path = _get_flutter_image_asset_folder_path(target_folder, nominal_resolution).joinpath(filename_to_save)
