@@ -60,7 +60,7 @@ def _build_folder(folder: Path, target_nominal_resolutions: List[int], forcibly_
     return True
 
 
-def generate_flutter_image_assets(source_folder: Path, target_folder: Path, nominal_resolution_of_source: int, nominal_resolution_target: int, forcibly_rebuild: bool = False, append_preferred_dimension=True) -> bool:
+def generate_flutter_image_assets(source_folder: Path, target_folder: Path, nominal_resolution_of_source: int, nominal_resolution_target: int, forcibly_rebuild: bool = False, append_preferred_dimension: bool = True) -> bool:
     """
     Returns:
         `False` if the folder already exists and the `forcibly_rebuild` parameter is `False`. Otherwise returns `True`.

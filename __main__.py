@@ -40,7 +40,7 @@ def _generate_flutter_image_assets_shell(args):
 
 def _parse_args():
     parser = argparse.ArgumentParser(prog='flutter_image_asset_helper', description='A helper helping to design and generate Flutter image assets.')
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.1.0')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.1.1')
 
     subparsers = parser.add_subparsers(dest='action', title='action', description='Which action should be executed?', help='"query": query design guidelines. "generate": generate Flutter image assets.')
 
