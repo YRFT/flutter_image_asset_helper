@@ -32,15 +32,15 @@ def _generate_flutter_image_assets_shell(args):
     source = Path(args.source)
     target = Path(args.target)
 
-    if generate_flutter_image_assets(source, target, nominal_resolution_of_source=args.sr, nominal_resolution_target=tr, forcibly_rebuild=args.force, append_preferred_dimension=args.no_preferred):
-        print('Flutter image assets have been successfully generated at "{!s}"".'.format(target.resolve()))
-    else:
+    if generate_flutter_image_assets(source, target, nominal_resolution_of_source=args.sr, nominal_resolution_target=tr, forcibly_rebuild=args.force, append_preferred_dimension=args.no_preferred) is None:
         print('The "{!s}" folder already exists.'.format(target.resolve()))
+    else:
+        print('Flutter image assets have been successfully generated at "{!s}"".'.format(target.resolve()))
 
 
 def _parse_args():
     parser = argparse.ArgumentParser(prog='flutter_image_asset_helper', description='A helper helping to design and generate Flutter image assets.')
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.1.1')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.1.2')
 
     subparsers = parser.add_subparsers(dest='action', title='action', description='Which action should be executed?', help='"query": query design guidelines. "generate": generate Flutter image assets.')
 

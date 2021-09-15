@@ -10,7 +10,7 @@ See also:
 
 import shutil
 import imghdr
-from typing import List
+from typing import List, Optional
 from pathlib import Path
 
 from PIL import Image
@@ -60,10 +60,10 @@ def _build_folder(folder: Path, target_nominal_resolutions: List[int], forcibly_
     return True
 
 
-def generate_flutter_image_assets(source_folder: Path, target_folder: Path, nominal_resolution_of_source: int, nominal_resolution_target: int, forcibly_rebuild: bool = False, append_preferred_dimension: bool = True) -> bool:
+def generate_flutter_image_assets(source_folder: Path, target_folder: Path, nominal_resolution_of_source: int, nominal_resolution_target: int, forcibly_rebuild: bool = False, append_preferred_dimension: bool = True) -> Optional[dict]:
     """
     Returns:
-        `False` if the folder already exists and the `forcibly_rebuild` parameter is `False`. Otherwise returns `True`.
+        `None` if the folder already exists and the `forcibly_rebuild` parameter is `False`. Otherwise returns a `dict` mapping original image filenames to newly generated image filenames.
     """
     if not isinstance(nominal_resolution_of_source, int):
         raise TypeError('"nominal_resolution_of_source" must be an int.')
@@ -81,8 +81,9 @@ def generate_flutter_image_assets(source_folder: Path, target_folder: Path, nomi
     target_nominal_resolutions = list(range(1, nominal_resolution_target+1))
 
     if not _build_folder(target_folder, target_nominal_resolutions, forcibly_rebuild):
-        return False
+        return None
 
+    asset_names = dict()
     for image_file_path in image_file_paths:
         filename_to_save = image_file_path.name
 
@@ -103,4 +104,6 @@ def generate_flutter_image_assets(source_folder: Path, target_folder: Path, nomi
                     resized_image.save(saving_path)
                     resized_image.close()
 
-    return True
+        asset_names[image_file_path.name] = saving_path.name
+
+    return asset_names
